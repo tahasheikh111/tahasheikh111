@@ -1,0 +1,926 @@
+#include<iostream>
+#include<Windows.h>
+using namespace std;
+template<class T>
+class linkedlist {
+public:
+	class node {
+	private:
+		node* next;
+		T data;
+		friend class linkedlist<T>;
+	public:
+		node() {
+			next = NULL;
+			data = 0;
+		}
+		node(T dat) {
+			next = NULL;
+			data = dat;
+		}
+	};
+	class listiterator {
+		friend class linkedlist<T>;
+		node* current;
+	public:
+		listiterator() {
+			current = NULL;
+		}
+		listiterator(node* p) {
+			current = p;
+		}
+		listiterator &operator++() {
+			if (current != NULL) {
+				current = current->next;
+			}
+			return *this;
+		}
+		listiterator operator++(int) {
+			node* temp = current;
+			if (current != NULL) {
+				current = current->next;
+			}
+			return temp;
+		}
+		T& operator*() {
+			return current->data;
+		}
+		bool operator==(const listiterator& obj) {
+			if (current == obj.current) {
+				return 1;
+			}
+			else {
+				return 0;
+			}
+		}
+		bool operator!=(const listiterator& obj) {
+			if (current != obj.current) {
+				return 1;
+			}
+			else {
+				return 0;
+			}
+		}
+	};
+	listiterator begin() {
+		return head;
+	}
+	listiterator end() {
+		return NULL;
+	}
+	void insertathead(T data) {
+		node* create = new node(data);
+		if (head == NULL) {
+			head = create;
+		}
+		else {
+			create->next = head;
+			head = create;
+
+		}
+	}
+	void inserattail(T data) {
+		//linkedlist<T>::listiterator* obj = begin();
+		if (head == NULL) {
+			insertathead(data);
+		}
+		else {
+			node* temp = head;
+			node* create = new node(data);
+			while (temp->next != NULL) {
+				temp = temp->next;
+			}
+			temp->next = create;
+			create->next = NULL;
+		}
+	}
+	void deleteathead() {
+		if (head == NULL) {
+			head = NULL;
+		}
+		else {
+			node* temp = head;
+			head = head->next;
+			delete temp;
+		}
+	}
+	void deleteattail() {
+		if (head == NULL) { head = NULL; }
+		else {
+			node* temp = head;
+			while (temp->next->next != NULL) {
+				temp = temp->next;
+			}
+			temp->next = NULL;
+			
+		}
+	}
+	void insertinorder(T data) {
+		node* create = new node(data);
+		if (head == NULL) {
+			insertathead(data);
+		}
+		else {
+			node* temp = head;
+			node* previous = NULL;
+			while (temp != NULL && temp->data <= data) {
+				previous = temp;
+				temp = temp->next;
+			}
+			if (temp == NULL) {
+				inserattail(data);
+			}
+			else if (temp==head) {
+				insertathead(data);
+			}
+			else {
+				create->next = previous->next;
+				previous->next = create;
+			}
+		}
+	}
+	void insertatpoint(T point,T data) {
+		node* temp = head;
+		node* create = new node(data);
+		while (temp != NULL && temp->data != point) {
+			temp = temp->next;
+		}
+		if (temp == NULL) {
+			cout << "NOT FOUND" << endl;
+		}
+		else if (temp == head) {
+			insertathead(data);
+		}
+		else if (temp->next == NULL) {
+			inserattail(data);
+		}
+		else if (temp != NULL) {
+			create->next = temp->next;
+			temp->next = create;
+		}
+		
+	}
+	void gettop(T& val) {
+		if (head != NULL) {
+			val = head->data;
+		}
+	}
+	void deleteatpoint(T data) {
+		node* temp = head;
+		node* previous = NULL;
+		while (temp != NULL && temp->data!=data) {
+			previous = temp;
+			temp = temp->next;
+		}
+		if (temp == head) {
+			deleteathead();
+		}
+		else if (temp->next == NULL) {
+			deleteattail();
+		}
+		else if (temp != NULL) {
+			previous->next = temp->next;
+		}
+		else {
+			cout << "NOT FOUND" << endl;
+		}
+	}
+	linkedlist() {
+		head = NULL;
+	}
+	int getcount() {
+		int count = 0;
+		node* temp = head;
+		while (temp != NULL) {
+			count++;
+			temp = temp->next;
+		}
+		return count;
+
+	}
+	~linkedlist() {
+		delete head;
+	}
+	void display() {
+		node* temp = head;
+		while (temp != NULL) {
+			cout << temp->data << " ";
+			temp = temp->next;
+		}
+	}
+
+private:
+	node* head;
+};
+
+template<class T>
+class stack {
+	linkedlist<T> obj;
+public:
+	stack() {
+
+	}
+	void push(T val) {
+		obj.insertathead(val);
+	}
+	void pop() {
+		obj.deleteathead();
+	}
+	bool isempty() {
+		if (obj.getcount() == 0) {
+			return 1;
+		}
+		else {
+			return 0;
+		}
+	}
+	void top(T& val) {
+		obj.gettop(val);
+	}
+	void display() {
+		cout << endl;
+		
+		obj.display();
+		cout << endl;
+	}
+};
+template<class T>
+class chessboard {
+	T** arr;
+	int rows;
+	int columns;
+	stack<int>s1;
+	stack<int>s2;
+	int noofqueens;
+public:
+	chessboard(int r, int c) {
+		noofqueens = r;
+		rows = r;
+		columns = c;
+		arr = new T* [rows];
+		for (int i = 0;i < rows;i++) {
+			arr[i] = new T[columns];
+		}
+		for (int i = 0;i < rows;i++) {
+			for (int j = 0;j < columns;j++) {
+				arr[i][j] = 0;
+			}
+		}
+	}
+	
+	void place0s(int i, int j) {
+		int tempi = i;
+		int tempj = j;
+		arr[tempi][tempj] = 0;
+		if (tempi >= 1 && tempj < columns) {
+
+			while (tempi >= 1 && tempj < columns) {
+				//if (tempi >= 1 && tempj < columns) {
+					arr[tempi - 1][tempj] = 0;
+					tempi--;
+				//}
+			
+			}
+		}
+		tempi = i;
+		tempj = j;
+		if (tempi >= 1 && tempj < columns - 1) {
+
+			while (tempi >= 1 && tempj < columns - 1) {
+				//if (tempi >= 1 && tempj < columns - 1) {
+					arr[tempi - 1][tempj + 1] = 0;
+					tempi--;
+					tempj++;
+				//}
+			}
+
+		}
+		tempi = i;
+		tempj = j;
+		if (tempi < rows && tempj < columns - 1) {
+
+			while (tempi < rows && tempj < columns - 1) {
+				//if (tempi < rows && tempj < columns - 1) {
+					arr[tempi][tempj + 1] = 0;
+					tempj++;
+				//}
+			}
+
+		}
+		tempi = i;
+		tempj = j;
+		if (tempi < rows - 1 && tempj < columns - 1) {
+
+			while (tempi < rows - 1 && tempj < columns - 1) {
+				//if (tempi < rows - 1 && tempj < columns - 1) {
+					arr[tempi + 1][tempj + 1] = 0;
+					tempi++;
+					tempj++;
+				//}
+			}
+		}
+		tempi = i;
+		tempj = j;
+		if (tempi < rows - 1 && tempj < columns) {
+
+			while (tempi < rows - 1 && tempj < columns) {
+				//if (tempi < rows - 1 && tempj < columns) {
+					arr[tempi + 1][tempj] = 0;
+					tempi++;
+				//}
+
+			}
+
+		}
+		tempi = i;
+		tempj = j;
+		if (tempi < rows - 1 && tempj >= 1) {
+
+			while (tempi < rows - 1 && tempj >= 1) {
+				//if (tempi < rows - 1 && tempj >= 1) {
+					arr[tempi + 1][tempj - 1] = 0;
+					tempi++;
+					tempj--;
+				//}
+			}
+
+		}
+		tempi = i;
+		tempj = j;
+		if (tempi < rows && tempj >= 1) {
+
+			while (tempi < rows && tempj >= 1) {
+				//if (tempi < rows && tempj >= 1) {
+					arr[tempi][tempj - 1] = 0;
+					tempj--;
+			//	}
+			}
+
+		}
+		tempi = i;
+		tempj = j;
+		if (tempi >= 1 && tempj >= 1) {
+
+			while (tempi >= 1 && tempj >= 1) {
+				//if (tempi >= 1 && tempj >= 1) {
+					arr[tempi - 1][tempj - 1] = 0;
+					tempi--;
+					tempj--;
+				//}
+			}
+		}
+
+	}
+	void place1satindex(int ix,int jy) {
+		for (int i = 0;i < rows;i++) {
+			for (int j = 0;j < columns;j++) {
+				if (i==ix && j==jy) {
+					int tempi = i;
+					int tempj = j;
+					if (tempi >= 1 && tempj < columns) {
+
+						while (tempi >= 1 && tempj < columns) {
+							if (tempi >= 1 && tempj < columns) {
+								arr[tempi - 1][tempj] = 1;
+								tempi--;
+							}
+						}
+					}
+					tempi = i;
+					tempj = j;
+					if (tempi >= 1 && tempj < columns - 1) {
+
+						while (tempi >= 1 && tempj < columns - 1) {
+							if (tempi >= 1 && tempj < columns - 1) {
+								arr[tempi - 1][tempj + 1] = 1;
+								tempi--;
+								tempj++;
+							}
+						}
+
+					}
+					tempi = i;
+					tempj = j;
+					if (tempi < rows && tempj < columns - 1) {
+
+						while (tempi < rows && tempj < columns - 1) {
+							if (tempi < rows && tempj < columns - 1) {
+								arr[tempi][tempj + 1] = 1;
+								tempj++;
+							}
+						}
+
+					}
+					tempi = i;
+					tempj = j;
+					if (tempi < rows - 1 && tempj < columns - 1) {
+
+						while (tempi < rows - 1 && tempj < columns - 1) {
+							if (tempi < rows - 1 && tempj < columns - 1) {
+								arr[tempi + 1][tempj + 1] = 1;
+								tempi++;
+								tempj++;
+							}
+						}
+					}
+					tempi = i;
+					tempj = j;
+					if (tempi < rows - 1 && tempj < columns) {
+
+						while (tempi < rows - 1 && tempj < columns) {
+							if (tempi < rows - 1 && tempj < columns) {
+								arr[tempi + 1][tempj] = 1;
+								tempi++;
+							}
+
+						}
+
+					}
+					tempi = i;
+					tempj = j;
+					if (tempi < rows - 1 && tempj >= 1) {
+
+						while (tempi < rows - 1 && tempj >= 1) {
+							if (tempi < rows - 1 && tempj >= 1) {
+								arr[tempi + 1][tempj - 1] = 1;
+								tempi++;
+								tempj--;
+							}
+						}
+
+					}
+					tempi = i;
+					tempj = j;
+					if (tempi < rows && tempj >= 1) {
+
+						while (tempi < rows && tempj >= 1) {
+							if (tempi < rows && tempj >= 1) {
+								arr[tempi][tempj - 1] = 1;
+								tempj--;
+							}
+						}
+
+					}
+					tempi = i;
+					tempj = j;
+					if (tempi >= 1 && tempj >= 1) {
+
+						while (tempi >= 1 && tempj >= 1) {
+							if (tempi >= 1 && tempj >= 1) {
+								arr[tempi - 1][tempj - 1] = 1;
+								tempi--;
+								tempj--;
+							}
+						}
+					}
+
+
+				}
+			}
+		}
+	}
+	
+
+	void place1s() {   // after removing the not fitted loc of queen when we place zero which effect
+		// the 1 of perff location
+		for (int i = 0;i < rows;i++) {
+			for (int j = 0;j < columns;j++) {
+				if (arr[i][j] == 3) {
+					int tempi = i;
+					int tempj = j;
+					if (tempi >= 1 && tempj < columns) {
+					
+						while (tempi >= 1 && tempj < columns) {
+							if (tempi >= 1 && tempj < columns) {
+								arr[tempi - 1][tempj] = 1;
+								tempi--;
+							}
+						}
+					}
+					tempi = i;
+					tempj = j;
+					if (tempi >= 1 && tempj < columns - 1) {
+						
+						while (tempi >= 1 && tempj < columns - 1) {
+							if (tempi >= 1 && tempj < columns - 1) {
+								arr[tempi - 1][tempj + 1] = 1;
+								tempi--;
+								tempj++;
+							}
+						}
+
+					}
+					tempi = i;
+					tempj = j;
+					if (tempi < rows && tempj < columns - 1) {
+						
+						while (tempi < rows && tempj < columns - 1) {
+							if (tempi < rows && tempj < columns - 1) {
+								arr[tempi][tempj + 1] = 1;
+								tempj++;
+							}
+						}
+
+					}
+					tempi = i;
+					tempj = j;
+					if (tempi < rows - 1 && tempj < columns - 1 ) {
+						
+						while (tempi < rows - 1 && tempj < columns - 1) {
+							if (tempi < rows - 1 && tempj < columns - 1) {
+								arr[tempi + 1][tempj + 1] = 1;
+								tempi++;
+								tempj++;
+							}
+						}
+					}
+					tempi = i;
+					tempj = j;
+					if (tempi < rows - 1 && tempj < columns ) {
+					
+						while (tempi < rows - 1 && tempj < columns) {
+							if (tempi < rows - 1 && tempj < columns) {
+								arr[tempi + 1][tempj] = 1;
+								tempi++;
+							}
+
+						}
+
+					}
+					tempi = i;
+					tempj = j;
+					if (tempi < rows - 1 && tempj >= 1 ) {
+						
+						while (tempi < rows - 1 && tempj >= 1) {
+							if (tempi < rows - 1 && tempj >= 1) {
+								arr[tempi + 1][tempj - 1] = 1;
+								tempi++;
+								tempj--;
+							}
+						}
+
+					}
+					tempi = i;
+					tempj = j;
+					if (tempi < rows && tempj >= 1 ) {
+						
+						while (tempi < rows && tempj >= 1) {
+							if (tempi < rows && tempj >= 1) {
+								arr[tempi][tempj - 1] = 1;
+								tempj--;
+							}
+						}
+
+					}
+					tempi = i;
+					tempj = j;
+					if (tempi >= 1 && tempj >= 1 ) {
+						
+						while (tempi >= 1 && tempj >= 1) {
+							if (tempi >= 1 && tempj >= 1) {
+								arr[tempi - 1][tempj - 1] = 1;
+								tempi--;
+								tempj--;
+							}
+						}
+					}
+					
+
+				}
+			}
+		}
+	}
+	void storecolumnvalue(int *&queencolumns) {
+		
+		int a = 0;
+		int count = 0;
+		for (int i = 0;i < rows;i++) {
+			for (int j = 0;j < columns;j++) {
+				if (arr[i][j] == 3) {
+					count++;
+					queencolumns[a] = j;
+					a++;
+				}
+			}
+		}
+		
+	
+
+	}
+	int* recursively(int i, int j) {
+		static int queens = noofqueens;
+		static int* queencolumns = new int[noofqueens];
+	
+
+		int sleeptime = 10;
+		bool flag = 0;
+		bool rowcheck = 0;
+		if (queens == -1) {
+		
+		
+			
+			return queencolumns;
+		
+		}
+		else  {
+			if (arr[i][j] == 0) {
+				
+					s1.push(i);
+					s2.push(j);
+					arr[i][j] = 3;
+					rowcheck = 1;
+					queens--;
+					place1satindex(i, j);
+					system("cls");
+					display();
+					Sleep(sleeptime);
+					flag = 1; // for one times
+			}
+			else {
+				if (j <= columns - 1) {
+					
+					
+					return recursively(i, j + 1);
+					
+				}
+
+			}
+			if (rowcheck == 0) {
+				s1.top(i);
+				s2.top(j);
+				s1.pop();
+				s2.pop();
+
+				queens++;
+				place0s(i, j);
+				place1s(); // for again check Queen Previous Location
+				system("cls");
+				display();
+				Sleep(sleeptime);
+				if (j <= columns - 1) {
+					
+					return recursively(i, j + 1);
+					
+					if (j == columns) {
+						j = 0;
+					
+				
+						return recursively(i - 1, j);
+						
+						
+					}
+
+				}
+				else {
+					j = 0;
+					
+				
+					return recursively(i, j);
+					
+				}
+			}
+			if (flag == 1) {
+				if (i < rows - 1 && j < columns) {
+				//	i++;
+					j = 0;
+					
+					return recursively(i + 1, j);
+					
+					
+				}
+			}
+			
+		}
+		storecolumnvalue(queencolumns);
+ 		return queencolumns;
+ 	}
+
+	int* recursivelyoriginal(int i, int j) {
+		static int queens = noofqueens;
+		static int* queencolumns = new int[noofqueens];
+		queencolumns = storecolumnvalue();
+		// for (int i = 0;i < noofqueens;i++) {
+		// 	queencolumns[i] = 0;
+		// }
+		int sleeptime = 10;
+		bool flag = 0;
+		bool rowcheck = 0;
+		if (queens == 0) {
+			queencolumns = storecolumnvalue();
+
+			// cout << "COLUMNS OF QUEEN: " << endl;
+			// for (int i = 0;i < noofqueens;i++) {
+			// 	cout << queencolumns[i] << "   ,";
+			// }
+			return queencolumns;
+
+		}
+		else {
+			if (arr[i][j] == 0) {
+
+				s1.push(i);
+				s2.push(j);
+				arr[i][j] = 3;
+				rowcheck = 1;
+				queens--;
+				place1satindex(i, j);
+				system("cls");
+				display();
+				Sleep(sleeptime);
+				flag = 1; // for one times
+			}
+			else {
+				if (j <= columns - 1) {
+					return recursively(i, j + 1);
+					if (queens == 0) {
+						queencolumns = storecolumnvalue();
+						// cout << "COLUMNS OF QUEEN: " << endl;
+						// for (int i = 0;i < noofqueens;i++) {
+						// 	cout << queencolumns[i] << "   ,";
+						// }
+						return queencolumns;
+					}
+				}
+
+			}
+			if (rowcheck == 0) {
+				s1.top(i);
+				s2.top(j);
+				s1.pop();
+				s2.pop();
+
+				queens++;
+				place0s(i, j);
+				place1s(); // for again check Queen Previous Location
+				system("cls");
+				display();
+				Sleep(sleeptime);
+				if (j <= columns - 1) {
+					return recursively(i, j + 1);
+					if (queens == 0) {
+
+						queencolumns = storecolumnvalue();
+						// cout << "COLUMNS OF QUEEN: " << endl;
+						// for (int i = 0;i < noofqueens;i++) {
+						// 	cout << queencolumns[i] << "   ,";
+						// }
+						return queencolumns;
+					}
+					if (j == columns) {
+						j = 0;
+						return recursively(i - 1, j);
+						queencolumns = storecolumnvalue();
+						if (queens == 0) {
+							queencolumns = storecolumnvalue();
+							// cout << "COLUMNS OF QUEEN: " << endl;
+							// for (int i = 0;i < noofqueens;i++) {
+							// 	cout << queencolumns[i] << "   ,";
+							// }
+							return queencolumns;
+						}
+					}
+
+				}
+				else {
+					j = 0;
+					return recursively(i, j);
+					if (queens == 0) {
+						queencolumns = storecolumnvalue();
+						// cout << "COLUMNS OF QUEEN: " << endl;
+						// for (int i = 0;i < noofqueens;i++) {
+						// 	cout << queencolumns[i] << "   ,";
+						// }
+						return queencolumns;
+					}
+				}
+			}
+			if (flag == 1) {
+				if (i < rows - 1 && j < columns) {
+					//	i++;
+					j = 0;
+					return  recursively(i + 1, j);
+					queencolumns = storecolumnvalue();
+					if (queens == 0) {
+						queencolumns = storecolumnvalue();
+						// cout << "COLUMNS OF QUEEN: " << endl;
+						// for (int i = 0;i < noofqueens;i++) {
+						// 	cout << queencolumns[i] << "   ,";
+						// }
+						return queencolumns;
+					}
+				}
+			}
+
+		}
+	}
+	void start3() {
+		int sleeptime = 0;
+		int queens = noofqueens;
+		bool rowcheck = 0;
+		int i = 0;
+		int j = 0;
+		bool flag = 0;
+		while (queens!=0) {
+			rowcheck = 0;
+			flag = 0;
+
+			if (i < rows && j < columns ) {
+				while (i < rows && j <= columns - 1 && flag == 0) {
+					if (arr[i][j] == 0) {
+						s1.push(i);
+						s2.push(j);
+						arr[i][j] = 3;
+						rowcheck = 1;
+						queens--;
+						place1satindex(i, j);
+						system("cls");
+						display();
+						Sleep(sleeptime);
+						flag = 1; // for one times
+					}
+					else {
+						if (j <= columns - 1) {
+							j++;
+						}
+
+					}
+
+				}
+				if (rowcheck == 0) {
+					s1.top(i);
+					s2.top(j);
+					s1.pop();
+					s2.pop();
+					
+					queens++;
+					place0s(i, j);
+					place1s(); // for again check Queen Previous Location
+					system("cls");
+					display();
+					Sleep(sleeptime);
+					if (j <= columns - 1) {
+						j++;
+						if (j == columns) {
+							j = 0;
+							i--;
+						}
+					
+					}
+					else {
+						j = 0;
+					}
+					
+					
+					
+				}
+				if (flag == 1) {
+					if (i <= rows - 1 && j < columns) {
+						i++;
+						j = 0;
+					}
+				}
+
+
+
+			}
+		}
+	}
+	void display() {
+		for (int i = 0;i < rows;i++) {
+			for (int j = 0;j< columns;j++) {
+				cout << arr[i][j] << " ";
+			}
+			cout << endl;
+		}
+	}
+};
+
+
+int main() {
+	int rows = 0;
+	int columns = 0;
+	cout << "Enter Number Of Rows: ";
+	cin >> rows;
+	cout << "Enter Number Of Columns: ";
+	cin >> columns;
+	chessboard<int> board(rows, columns);
+	//int* queencolumns;
+	
+	if (rows >3 && columns >3  && rows == columns) {
+		int *queencolumn=board.recursively(0, 0);
+		//	board.start3();// iterative way
+		//	board.place0s(0, 0);
+		cout << "---------------------------------------------------RESULT--------------------------------------" << endl;
+		board.display();
+		cout << "ColumnS: " << endl;
+		for (int i = 0;i < columns;i++) {
+			cout << queencolumn[i] << "   ,";
+		}
+		cout << endl;
+	}
+
+	else {
+		cout << "Can't Placed" << endl;
+	}
+
+}
