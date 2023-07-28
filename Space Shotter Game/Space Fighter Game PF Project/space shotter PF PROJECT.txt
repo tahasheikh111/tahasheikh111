@@ -1,0 +1,474 @@
+/* GROUP MEMBERS NAMES:
+    MUHAMMAD AHMED (L21-7639)
+    MUHAMMAD AHMAD (L21-5151)
+    MUHAMMAD HASSAN(L21-7502)
+    TAHA SHIEKH(L21-5175)
+    SECTION:BS(CS):1J
+*/
+#include<iostream>                     //these are the library for c++ code
+#include<cstdlib>                       //this library is for random func    
+#include<ctime>                         // this is for random function with seed time
+#include"graphics.h"                    /*this is our graphic library taken from */
+#include<windows.h>                     //sound and other are taken from this library
+#include<mmsystem.h>                    //this is for multimedia system
+
+
+using namespace std;
+void instruction()                      //this function shows instruction window
+{
+    readimagefile("inst.jpg", 0, 0, 1100, 609);
+}
+void eliminate(int& lef, int& rig, int& UP, int& dow)           //this function is to generate enemy at random location 
+{
+    int q = rand() % 739;                                       //this gives us random number in between 0 and 739 which is our screen size
+
+    lef = q; rig = lef + 50; UP = 0; dow = UP + 50;
+}
+void inteface(int& L1, int& k1, int& r1, int& SAA)              //this function is for interface
+{
+
+    char msg[128] = " L I V E S : ";
+    sprintf(msg, " L I V E S : %d", L1);                        //l1 is number of lives
+    outtextxy(875, 50, msg);
+    outtextxy(795, 100, "--------------------------------------------------");
+    char ms[128] = " S C O R E :";
+    sprintf(ms, " S C O R E : %d", k1);                          //k1 is for score
+    outtextxy(880, 150, ms);
+    outtextxy(795, 200, "--------------------------------------------------");
+
+    char m[128] = " L E V E L :";
+    sprintf(m, " L E V E L : %d", r1);                          //r1 is for level
+    outtextxy(880, 250, m);
+    outtextxy(795, 300, "--------------------------------------------------");
+
+    char ma[128] = "S P E C I A L A T T A C K : ";
+    sprintf(ma, "S P E C I A L A T T A C K :%d", SAA);          //SAA is variable for special attacks
+    outtextxy(850, 350, ma);
+    outtextxy(795, 400, "--------------------------------------------------");
+    outtextxy(908, 450, "T H E");
+    outtextxy(890, 500, "S P A C E");
+    outtextxy(870, 550, "S H O O T E R");
+
+}
+void score(int& ch, int& k1)                                     //this function updates score throughout the code
+{
+    if (ch == 1)                                                /*ch variable is a check of invidual enemy because each enemy
+                                                                has differnt score*/
+    {
+        k1 = k1 + 10;
+    }if (ch == 2)                                               //k1 is for score and each time enemy dies score is updated
+    {
+        k1 = k1 + 15;
+    }
+    if (ch == 3)
+    {
+        k1 = k1 + 8;
+    }
+    if (ch == 4)
+    {
+        k1 = k1 + 6;
+    }
+    if (ch == 5)
+    {
+        k1 = k1 + 5;
+    }
+}
+int main()
+{
+    int win = 0;                                                //for win                                     
+    int k = 0;                                                  //k variable is for score in main function
+    int SA = 3;                                                 //SA is for special attack
+    int s = 6;                                                  //s variable shows speed                                         
+    int r0 = 1;                                                 //it a counter for levels
+    srand(time(0));                                             // it genrates random values with time
+    int L = 3;                                                  //L is variavle for lives counting
+    int f = 0, f1 = 0, f2 = 0, f3 = 0;                          //these variables for level checks
+    int l = 150, u = 50, r = 200, d = 100;                      //these are for our enemy
+    int l1 = 200, u1 = 0, r1 = 250, d1 = 50;                    //this one is for second enemy
+    int u2 = 0, l2 = 0, r2 = 0, d2 = 0;                         //this one is for 3 enemy
+    int u3 = 0, l3 = 0, r3 = 0, d3 = 0;                         //this one is for 4 enemy
+    int u4 = 0, l4 = 0, r4 = 0, d4 = 0;                         //this one is for 5 enemy
+
+    int left = 350, rights = 400, up = 550, down = 600;         //coordinate for space ship
+    initwindow(1300, 1000);                                     //this is our window
+    char v; char t; int xox = 0;                                // 'v' is movement 't' is for selection of game menues 'xox' is for game end                
+
+    readimagefile("starsphotoshop.jpg", 0, 0, 1100, 609);      //this is our main menu window
+    t = getch();
+    if (t == '1' || t == '2')
+    {
+        readimagefile("inst.jpg", 0, 0, 1100, 609);            //this is our instruction window
+        delay(1000);
+        PlaySound("s1.wav", NULL, SND_SYNC);                    //this is for sound play
+
+        readimagefile("lvl1.jpg", 0, 0, 1100, 609);               //it is for represtantion of level 1
+        delay(1000);
+        for (;;) {                                              //here is infinte loop in which whole game is running
+            if (xox == 1)                                       //this checks whether the game  is over or not
+            {
+                break;
+            }
+            if (win == 1)                                   //this checks if game is won or not
+            {
+                break;
+            }
+
+            inteface(L, k, r0, SA);                         //this is for interface function for  creation of interface
+            cleardevice();
+            int page = 0;
+            for (;;) {                                      //this loop contains all the functionality of game
+
+
+                setactivepage(page);                        //this function removes flickering 
+                setvisualpage(1 - page);
+                cleardevice();
+                setcolor(GREEN);                                //this is boundary colours
+                rectangle(0, 0, 1100, 609);
+                setcolor(RED);
+                rectangle(0, 0, 1103, 612);
+                setcolor(GREEN);
+                rectangle(0, 0, 1106, 615);
+                setcolor(RED);
+                rectangle(0, 0, 1109, 618);
+                setcolor(GREEN);
+                rectangle(0, 0, 1112, 621);
+                setcolor(RED);
+                rectangle(0, 0, 1115, 624);
+                setcolor(GREEN);
+                rectangle(0, 0, 1118, 627);
+                setcolor(RED);
+                rectangle(0, 0, 1121, 630);
+                setcolor(GREEN);
+                rectangle(0, 0, 789, 609);
+                setcolor(WHITE);
+
+                rectangle(0, 0, 1100, 609);                  //outer rectangle
+                rectangle(0, 0, 789, 609);                   //inner rectangle
+                readimagefile("spcc.jpg", left, up, rights, down);
+                char msg[128] = " L I V E S : ";                                    //this print interface again because it is cleared when we move anything  
+                sprintf(msg, " L I V E S : %d", L);
+                outtextxy(875, 50, msg);
+                outtextxy(795, 100, "----------------------------------------------------------------------------");
+                char ms[128] = " S C O R E :";
+                sprintf(ms, " S C O R E : %d", k);
+                outtextxy(880, 150, ms);
+                outtextxy(795, 200, "----------------------------------------------------------------------------");
+
+                char m[128] = " L E V E L :";
+                sprintf(m, " L E V E L : %d", r0);
+                outtextxy(880, 250, m);
+                outtextxy(795, 300, "----------------------------------------------------------------------------");
+
+                char ma[128] = "S P E C I A L A T T A C K : ";
+                sprintf(ma, "S P E C I A L A T T A C K :%d", SA);
+                outtextxy(850, 350, ma);
+                outtextxy(795, 400, "----------------------------------------------------------------------------");
+                outtextxy(908, 450, "T H E");
+                outtextxy(890, 500, "S P A C E");
+                outtextxy(870, 550, "S H O O T E R");
+                readimagefile("enemy1.jpg", l, u, r, d);            //enemy number 1
+                readimagefile("enemy2.jpg", l1, u1, r1, d1);        //enemy number 2
+                readimagefile("enemy3.jpg", l2, u2, r2, d2);        //enemy number 3
+                readimagefile("enemy4.jpg", l3, u3, r3, d3);        //enemy number 4
+                readimagefile("enemy5.jpg", l4, u4, r4, d4);        //enemy number 5
+
+                u = u + s; d = d + s;                       //this controls the speed of enemy
+                u1 = u1 + s; d1 = d1 + s;                   //for 2 enemy
+                u2 = u2 + s; d2 = d2 + s;                   //for 3 enemy
+                u3 = u3 + s; d3 = d3 + s;                   //for 4 enemy    
+                u4 = u4 + s; d4 = d4 + s;                   //for 5 enemy
+
+                if (d >= 605 && d <= 622)                     //when enemy 1 reaches down to screen this decrease life 
+                {
+                    L = L - 1;
+                    eliminate(l, r, u, d);
+                    PlaySound(TEXT("36.wav"), NULL, SND_SYNC);
+                    break;
+                }
+                if (d1 >= 605 && d1 <= 622)                     //when enemy 2 reaches down to screen this decrease life
+                {
+                    L = L - 1;
+                    eliminate(l1, r1, u1, d1);
+                    PlaySound(TEXT("36.wav"), NULL, SND_SYNC);
+                    break;
+                }
+                if (d2 >= 605 && d2 <= 622 && f == 1)                     //when enemy 3 reaches down to screen this decrease life
+                {
+                    L = L - 1;
+                    eliminate(l2, r2, u2, d2);
+                    PlaySound(TEXT("36.wav"), NULL, SND_SYNC);
+                    break;
+                }
+                if (d3 >= 605 && d3 <= 622 && f1 == 1)                     //when enemy 4 reaches down to screen this decrease life
+                {
+                    L = L - 1;
+                    eliminate(l3, r3, u3, d3);
+                    PlaySound(TEXT("36.wav"), NULL, SND_SYNC);
+                    break;
+                }
+                if (d4 >= 605 && d4 <= 622 && f2 == 1)                     //when enemy 5 reaches down to screen this decrease life
+                {
+                    L = L - 1;
+                    eliminate(l4, r4, u4, d4);
+                    PlaySound(TEXT("36.wav"), NULL, SND_SYNC);
+                    break;
+                }
+                if (d == 550 && l >= left - 50 && r <= rights + 50)                     //when enemy 1 strikes space ship this decrease life
+                {
+                    L = L - 1;
+                    eliminate(l, r, u, d);
+                    PlaySound(TEXT("36.wav"), NULL, SND_SYNC);
+                    break;
+                }
+                if (d1 == 550 && l1 >= left - 50 && r1 <= rights + 50)                  //when enemy 2 strikes space ship this decrease life
+                {
+                    L = L - 1;
+                    eliminate(l1, r1, u1, d1);
+                    PlaySound(TEXT("36.wav"), NULL, SND_SYNC);
+
+                    break;
+                }
+                if (d2 == 550 && l2 >= left - 50 && r2 <= rights + 50 && f == 1)                  //when enemy 3 strikes space ship this decrease life
+                {
+                    L = L - 1;
+                    eliminate(l2, r2, u2, d2);
+                    PlaySound(TEXT("36.wav"), NULL, SND_SYNC);
+                    break;
+                }
+                if (d3 == 550 && l3 >= left - 50 && r3 <= rights + 50 && f1 == 1)                  //when enemy 4 strikes space ship this decrease life
+                {
+                    L = L - 1;
+                    eliminate(l3, r3, u3, d3);
+                    PlaySound(TEXT("36.wav"), NULL, SND_SYNC);
+                    break;
+                }
+                if (d4 == 550 && l4 >= left - 50 && r4 <= rights + 50 && f2 == 1)                  //when enemy 5 strikes space ship this decrease life
+                {
+                    L = L - 1;
+                    eliminate(l4, r4, u4, d4);
+                    PlaySound(TEXT("36.wav"), NULL, SND_SYNC);
+                    break;
+                }
+
+                if (k >= 100 && f == 0)                                                     //this increses level when score reaches certain value
+                {
+
+                    readimagefile("lvl2.jpg", 0, 0, 1100, 609);
+                    PlaySound("s1.wav", NULL, SND_SYNC);
+                    delay(1000);
+
+                    int q = rand() % 739;
+                    l2 = q; r2 = l2 + 50; u2 = 0; d2 = u2 + 50;
+                    f = 1;
+
+                    s = s + 2;
+                    r0 = 2;
+                }
+                if (k >= 200 && f1 == 0)                                                     //this increses level when score reaches certain value
+                {
+
+                    readimagefile("lvl3.jpg", 0, 0, 1100, 609);
+                    delay(1000);
+                    PlaySound("s1.wav", NULL, SND_SYNC);
+                    int q = rand() % 739;
+                    l3 = q; r3 = l3 + 50; u3 = 0; d3 = u3 + 50;
+                    f1 = 1;
+                    s = s + 2;
+                    r0 = 3;
+                }
+
+                if (k >= 300 && f2 == 0)                                                     //this increses level when score reaches certain value
+                {
+                    PlaySound("s1.wav", NULL, SND_SYNC);
+                    readimagefile("lvl4.jpg", 0, 0, 1100, 609);
+                    delay(1000);
+                    int q = rand() % 739;
+                    l4 = q; r4 = l4 + 50; u4 = 0; d4 = u4 + 50;
+                    f2 = 1;
+                    s = s + 2;
+                    r0 = 4;
+
+                }
+                if (k >= 500)                                                     //this shows victory of user
+                {
+                    readimagefile("victory.jpg", 0, 0, 1100, 609);
+                    delay(5000);
+                    return 0;
+                }
+
+                if (kbhit())                                                    //this detects keyboard keys hit 
+                {
+                    v = getch();
+                    if (v == 'd')                                               //if user presses d spaceship moves left 
+
+                    {
+                        readimagefile("download.jpg", left, up, rights, down);      //this prints a black image whenever space ship moves 
+                        rectangle(0, 0, 1100, 609);
+                        rectangle(0, 0, 789, 609);
+
+                        if (rights >= 789)                                      //if sapce is end pint it does not allow it to move
+                        {
+                            rights = 789;
+                            readimagefile("spcc.jpg", left, up, rights, down);
+
+                        }
+                        else                                               //if space ship is not at end it will move
+                        {
+                            left += 40;
+                            rights += 40;
+
+                            readimagefile("spcc.jpg", left, up, rights, down);
+                        }
+
+                    }
+                    else if (v == 'a')                                               //if user presses a spaceship moves right
+                    {
+                        readimagefile("download.jpg", left, up, rights, down);
+                        rectangle(0, 0, 1100, 609);
+                        rectangle(0, 0, 789, 609);
+                        delay(0.0001);
+                        if (left <= 0)                                              //if space ship is at starting point it will not move
+                        {
+                            left = 0;
+                            readimagefile("spcc.jpg", left, up, rights, down);
+                        }
+                        else                                                    //if space ship is not at start it will move
+                        {
+                            left -= 40;
+                            rights -= 40;
+                            readimagefile("spcc.jpg", left, up, rights, down);
+                        }
+
+                    }
+
+                    else if (v == 32)                           //this is for fire
+                    {
+                        PlaySound("fire.wav", NULL, SND_SYNC);
+                        int chk = 0, chk1 = 0, chk3 = 0;
+                        int chk2 = 0, chk4 = 0;
+                        for (int i = 0; i < 1500; i++)
+                        {
+                            int x = left + 25, y = up - 50 - i, z = left + 26, p = down - 50 - i;
+                            setcolor(RED);
+                            rectangle(x, y, z, p);
+                            setcolor(WHITE);
+                            delay(0.05);
+
+                            if (x >= l + 2 && z <= r + 20 && y >= u + 2 && p <= d + 20)
+                            {
+                                int q = rand() % 739;                            //if bullet hit enemy it will generate enemy at random place
+                                l = q; r = l + 50; u = 0; d = u + 50;
+                                chk = 1;
+                                break;
+
+                            }
+
+                            if (x >= l1 + 5 && z <= r1 + 20 && y >= u1 + 5 && p <= d1 + 20)
+                            {
+                                int e = rand() % 739;                            //if bullet hit enemy it will generate enemy at random place
+                                l1 = e; r1 = l1 + 50; u1 = 0; d1 = u1 + 50;
+                                chk = 2;
+                                break;
+
+                            }
+                            if (x >= l2 + 2 && z <= r2 + 20 && y >= u2 + 2 && p <= d2 + 20)
+                            {
+                                int q = rand() % 739;                            //if bullet hit enemy it will generate enemy at random place
+                                l2 = q; r2 = l2 + 50; u2 = 0; d2 = u2 + 50;
+                                chk = 3;
+                                break;
+
+                            }
+                            if (x >= l3 + 2 && z <= r3 + 20 && y >= u3 + 2 && p <= d3 + 20)
+                            {
+                                int q = rand() % 739;                            //if bullet hit enemy it will generate enemy at random place
+                                l3 = q; r3 = l3 + 50; u3 = 0; d3 = u3 + 50;
+                                chk = 4;
+                                break;
+
+                            }
+                            if (x >= l4 + 2 && z <= r4 + 20 && y >= u4 + 2 && p <= d4 + 20)
+                            {
+                                int q = rand() % 739;                            //if bullet hit enemy it will generate enemy at random place
+                                l4 = q; r4 = l4 + 50; u4 = 0; d4 = u4 + 50;
+                                chk = 5;
+                                break;
+                            }
+
+                        }
+                        score(chk, k);                                          //score updation is done through this function 
+
+
+                    }
+                    if (v == 'i' && SA != 0)                            //this is our special attack(baroood bomb)
+                    {
+                        readimagefile("bomb3.jpg", 100, 100, 680, 509);
+                        if (r0 >= 1 && r0 <= 5)
+                        {
+                            int q = rand() % 739;
+
+                            l = q; r = l + 50; u = 0; d = u + 50;
+
+                            q = rand() % 739;
+
+                            l1 = q; r1 = l1 + 50; u1 = 0; d1 = u1 + 50;
+                            k = k + 25;
+                        }
+                        if (r0 >= 2 && r0 <= 5)
+                        {
+                            int q = rand() % 739;
+
+                            l2 = q; r2 = l2 + 50; u = 0; d2 = u2 + 50;
+                            k = k + 8;
+                        }
+                        if (r0 >= 3 && r0 <= 5)
+                        {
+                            int q = rand() % 739;
+
+                            l3 = q; r3 = l3 + 50; u3 = 0; d3 = u3 + 50;
+                            k = k + 6;
+
+                        }
+                        if (r0 >= 4 && r0 <= 5)
+                        {
+                            int q = rand() % 739;
+
+                            l4 = q; r4 = l4 + 50; u4 = 0; d4 = u4 + 50;
+                            k = k + 4;
+
+                        }
+                        SA--;
+                        PlaySound("special.wav", NULL, SND_SYNC);
+
+                    }
+
+
+
+                }
+
+                page = 1 - page;                //this is also to remove flickering
+
+                if (L == 0)                      //this shows gameover window
+                {
+                    PlaySound("gameover.wav", NULL, SND_SYNC);
+                    readimagefile("gameover.jpg", 0, 0, 1100, 609);
+
+                    xox = 1;
+
+
+
+                }
+
+            }
+        }
+
+    }
+    else if (t == '3')                  //this exits our window
+    {
+
+        return 0;
+
+
+    }
+
+}

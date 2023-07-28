@@ -1,0 +1,733 @@
+#include<iostream>
+#include<fstream>
+#include<string>
+#include<cstring>
+#include<string.h>
+using namespace std;
+class node {
+public:
+	node* left;
+	node* right;
+	char data;
+	int frequency;
+	node() {
+		data = 0;
+		frequency = 0;
+		left = NULL;
+		right = NULL;
+		
+	}
+	node(char key,int freq) {
+		data = key;
+		frequency = freq;
+		left = NULL;
+		right = NULL;
+	}
+	void setdata(char key, int freq) {
+		data = key;
+		frequency = freq;
+	}
+	void display() {
+		cout << "Data : " << data << "  ";
+		cout << "Frequency: " << frequency;
+		cout << endl;
+	}
+};
+
+class minHeap {
+	int size;
+	node** arr;
+	
+	int count;
+public:
+	node* root;
+	minHeap() {
+		count = 0;
+		root = NULL;
+		size = 10;
+		arr = new node*[size];
+		for (int i = 0;i < size;i++) {
+			arr[i] = new node;
+		}
+	
+	}
+	minHeap(char* temparr,int*freq,int N) {
+		size = N;
+		count = size;
+		root = NULL;
+		arr = new node*[size];
+		for (int i = 0;i < size;i++) {
+			arr[i] = new node;
+		}
+		
+		for (int i = 0;i < N;i++) {
+			arr[i]->setdata(temparr[i], freq[i]);
+		}
+		buildMinHeap();
+	
+	}
+	void buildMinHeap() {
+		int index = count-1;
+		int left = 2 * index + 1;
+		int right = 2 * index + 2;
+		int parent = index;
+		while (index >= 0) {
+		
+			left = 2 * index+1;
+			right = 2 * index + 2;
+			parent = index;
+
+			if (left >= count && right >= count) {
+				//cout << "LEaf NOde ALready MIN HEAP" << endl;
+				index--;
+			}
+			else if (left < count && right >= count) { // means only 1 leftnode
+				if (arr[parent]->frequency > arr[left]->frequency) {
+					swap(arr[parent]->data, arr[left]->data);
+					swap(arr[parent]->frequency, arr[left]->frequency);
+					swap(arr[parent]->left, arr[left]->left);
+					swap(arr[parent]->right, arr[left]->right);
+					index = count - 1;
+				}
+				index--;
+			}
+			else if (left < count && right < count) {
+				int smallest = 0;
+				if (arr[left]->frequency <= arr[right]->frequency) {
+					smallest = left;
+				}
+				else {
+					smallest = right;
+				}
+				if (arr[parent]->frequency > arr[smallest]->frequency) {
+					swap(arr[parent]->frequency, arr[smallest]->frequency);
+					swap(arr[parent]->data, arr[smallest]->data);
+					swap(arr[parent]->left, arr[smallest]->left);
+					swap(arr[parent]->right, arr[smallest]->right);
+					index = count - 1;
+				}
+				index--;
+			}
+		}
+		
+		
+	}
+	void bubble_up(int i) {
+		int index = floor(i / 2); //Parent of i
+		while (arr[index]->frequency > arr[i]->frequency) {
+			swap(arr[index]->frequency, arr[i]->frequency);
+			swap(arr[index]->data, arr[i]->data);
+			swap(arr[index]->left, arr[i]->left);
+			swap(arr[index]->right, arr[i]->right);
+			i = index;
+			index = floor(i / 2);
+		}
+	}
+	void bubble_down(int i) {
+		bool flag = 1;
+		while (flag == 1) {
+			int left = 2 * i + 1;
+			int right = 2 * i + 2;
+			int children = 0;
+			if (left < count && right < count) {
+				if (arr[left]->frequency > arr[right]->frequency) {
+					children = right;
+				}
+				else {
+					children = left;
+				}
+				if (arr[children]->frequency < arr[i]->frequency) {
+					swap(arr[i]->frequency, arr[children]->frequency);
+					swap(arr[i]->data, arr[children]->data);
+					swap(arr[i]->left, arr[children]->left);
+					swap(arr[i]->right, arr[children]->right);
+					
+					flag = 1;
+				}
+				i = children;
+				if (children >= count ) {
+					flag = 0;
+				}
+			}
+			else if (left < count && right >= count) {   // only 1 left child right child case is not possible 
+				if (arr[i]->frequency > arr[left]->frequency) {
+					swap(arr[i]->frequency, arr[left]->frequency);
+					swap(arr[i]->data, arr[left]->data);
+					swap(arr[i]->left, arr[left]->left);
+					swap(arr[i]->right, arr[left]->right);
+					i = left;
+				}
+				flag = 0;
+			}
+			else {
+				flag = 0;
+			}
+		
+		}
+	
+	}
+		
+	void insert(node *temp) {
+		
+		arr[count] = new node(temp->data,temp->frequency);
+		arr[count]->left = temp->left;
+		arr[count]->right = temp->right;
+		bubble_up(count);
+		count++;
+	
+	}
+	
+	bool isEmpty() const {
+		if (count == 0) {
+			return 1;
+		}
+		else {
+			return 0;
+		}
+	}
+	node *getMin() {
+		return arr[0];
+	}
+	
+	void deleteMin() {
+		swap(arr[0]->data, arr[count-1]->data);
+		swap(arr[0]->frequency, arr[count - 1]->frequency);
+		swap(arr[0]->left, arr[count-1]->left);
+		swap(arr[0]->right, arr[count-1]->right);
+		if (count - 1 >= 0) {
+			delete[]arr[count - 1];
+			count--;
+		}
+		bubble_down(0);
+		
+	
+	}
+
+
+
+	void creatingbinarytree() {
+		node* previous = NULL;
+		node* getnode1 = NULL;
+		node* getnode2 = NULL;
+		while (count > 1) {
+			node* getnode1 = new node;
+			getnode1->setdata(getMin()->data, getMin()->frequency);
+			getnode1->left = getMin()->left;
+			getnode1->right = getMin()->right;
+			
+			deleteMin();
+			
+			node* getnode2 = new node;
+			getnode2->setdata(getMin()->data, getMin()->frequency);
+			getnode2->left = getMin()->left;
+			getnode2->right = getMin()->right;
+			
+			deleteMin();
+			
+			node* newnode;
+			newnode=new node('*',getnode1->frequency+getnode2->frequency);
+			
+			newnode->left = getnode1;
+			newnode->right = getnode2;
+			insert(newnode);
+			previous = newnode;
+			
+		}
+		node* temproot = new node;
+		temproot = getMin();
+		//temproot->left = getnode1;
+		//temproot->right = previous;
+		root = temproot;
+	
+	
+		// node* disp = root;
+		// print2Dutil(disp);
+		
+	}
+	void print2DutilR() {
+		print2Dutil(root);
+	}
+	void print2Dutil(node* root, int space = 5) {
+		const int Count = 10;
+		if (root == nullptr) {
+			return;
+		}
+		space += Count;
+		print2Dutil(root->right, space);
+
+		cout << endl;
+		for (int i = Count; i < space; i++) {
+			cout << " ";
+		}
+		cout << root->data << "\n";
+		print2Dutil(root->left, space);
+
+	}
+	void displaytree() {
+		node* temp = root;
+		print2Dutil(temp);
+	}
+	void display() {
+		int i = 0;
+		cout << "Display Heap" << endl;
+		for (;i < count;i++) {
+			cout << i << ")  ";
+			arr[i]->display();
+		}
+		cout <<	endl;
+	}
+
+	string searchelement(char key) {
+		string str;
+		node* temproot = root;
+		bool flag = 0;
+		//hasPath(temproot, str, key);
+		 searchelement(str, temproot,key, flag);
+		 if (flag == 0) {
+		 	str = " ";
+		 }
+		return str;
+	}
+
+	void searchelement(string& str,node*current,char key1,bool &flag) {
+		if (current == NULL) {
+			str = str.substr(0,str.size() - 1);
+			return;
+		}
+		else {
+			if (current->data == key1) {
+				flag = 1;
+				return;
+			}
+
+			else if (flag == 0) {
+				if (flag != 1) {
+					str = str + '0';
+				}
+				searchelement(str, current->left, key1, flag);
+				if (flag != 1) {
+					str = str + '1';
+				}
+				
+				searchelement(str, current->right, key1, flag);
+				if (flag != 1) {
+					str = str.substr(0, str.size() - 1);
+				}
+				
+				return;
+			}
+			
+
+		}
+	}
+};
+
+
+int encodemessage(char *charr,int *frequencylist,int currentelements,string filelocation,int &extrabits) {
+	int count = 0;
+	minHeap heap(charr, frequencylist, currentelements);
+	heap.creatingbinarytree();
+	unsigned char buffer = 0x00;
+	int buffercount = 0;
+	ifstream fin;
+	fin.open(filelocation);
+	//fin.open("copytextfile.txt");
+	if (!fin) {
+		cout << "Unable to open File..." << endl;
+	}
+	else {
+		ofstream wf("sample.bin", ios::out | ios::binary);
+		if (!wf) {
+			cout << "Can't Create Binary File" << endl;
+		}
+		else {
+			string str;
+			while (!fin.eof()) {
+				//cin.ignore();
+				getline(fin, str);
+				for (int i = 0;i < str.length();i++) {
+					string tempstr = heap.searchelement(str[i]);
+					//cout << str[i] << " : " << tempstr << endl;
+					
+					for (int j = 0;j < tempstr.size();j++) {
+
+						if (buffercount == 7) {
+
+							if (tempstr[j] == '1') {
+								buffer = buffer | 0x01;
+							}
+							else {
+								buffer = buffer | 0x00;
+							}
+							count++;
+							wf.write((char*)&buffer, 1);
+							if (!wf.good()) {
+								cout << "error occuried at runtime" << endl;
+
+							}
+							buffer = buffer & 0x00;// flush
+							buffercount = 0;
+						}
+						else if (tempstr[j] == '1') {
+							//buffer <<= 1;
+
+							buffer = buffer | 0x01;
+							buffer <<= 1;
+							
+							buffercount++;
+							
+						}
+						else {
+							//buffer <<= 1;
+							buffer = buffer | 0x00;
+							buffer <<= 1;
+							buffercount++;
+							
+						}
+						
+					
+					}
+				}
+				//wf << '\n';
+			}
+			if (buffercount != 0) {  // means not complete 8 bit
+				count++;
+				int k = buffercount;
+				extrabits = 15 - k;
+				while (k != 7) {
+					buffer <<= 1;
+					k++;
+				}
+				wf.write((char*)&buffer, 1);
+				if (!wf.good()) {
+					cout << "error occuried at runtime" << endl;
+
+				}
+				buffer = buffer & 0x00;// flush
+				buffercount = 0;
+			}
+		}
+
+		
+	}
+	return count;
+}
+
+
+int decodemessage(int countbytes,char* charr, int* frequencylist, int currentelements,int*end_of_line,int countsize,int extrabits) {
+	minHeap heap(charr, frequencylist, currentelements);
+	heap.creatingbinarytree();
+	int buffercount = 0;
+	ofstream output("newdecodefile.txt", ios::out);
+	//unsigned char* buffer = new unsigned char[countbytes];
+	ifstream fin("sample.bin", ios::in | ios::binary);
+	unsigned char buffer=0x00;
+	unsigned char masking = 0x00;
+	string x;
+	string previousx;
+	node* temp = heap.root;
+	int decodecount = 0;
+	int bufferindex=0;
+	node* previoustemp = NULL;
+	int nextcolumn = 0; // attributes for containing '\n'
+	int nextrow = 0;
+	fin >> noskipws;
+	while (!fin.eof()) {
+		fin >> buffer;
+		decodecount++;
+	
+		masking = buffer;
+		masking = masking & 128;
+		masking >>= 7;
+		if (masking == 0x01) {
+			x = x + '1';
+		
+		}
+		else {
+			x = x + '0';
+		
+		}
+		masking = buffer;
+		masking = masking & 64;
+		masking >>= 6;
+		if (masking == 0x01) {
+			x = x + '1';
+		
+		}
+		else {
+			x = x + '0';
+		
+		}
+		masking = buffer;
+		masking = masking & 32;
+		masking >>= 5;
+		if (masking == 0x01) {
+			x = x + '1';
+		
+		}
+		else {
+			x = x + '0';
+			
+		}
+		masking = buffer;
+		masking = masking & 16;
+		masking >>= 4;
+		if (masking == 0x01) {
+			x = x + '1';
+			
+		}
+		else {
+			x = x + '0';
+			
+		}
+		masking = buffer;
+		masking = masking & 8;
+		masking >>= 3;
+		if (masking == 0x01) {
+			x = x + '1';
+			
+		}
+		else {
+			x = x + '0';
+			
+		}
+		masking = buffer;
+		masking = masking & 4;
+		masking >>= 2;
+		if (masking == 0x01) {
+			x = x + '1';
+		}
+		else {
+			x = x + '0';
+		}
+		masking = buffer;
+		masking = masking & 2;
+		masking >>= 1;
+		if (masking == 0x01) {
+			x = x + '1';
+			
+		}
+		else {
+			x = x + '0';
+		
+		}
+		masking = buffer;
+		masking = masking & 1;
+		if (masking == 0x01) {
+			x = x + '1';
+		
+		}
+		else {
+			x = x + '0';
+		
+		}
+		int deletestring = 0;
+		bool findleaf = 0;
+		for (int i = 0;i<x.size() &&  findleaf == 0;i++) {
+			if (temp != NULL && temp->left == NULL && temp->right == NULL) {
+				cout << temp->data;
+				nextcolumn++;
+				output << temp->data;
+				temp = heap.root;
+				findleaf = 1;
+				
+				if (nextcolumn == end_of_line[nextrow]) {
+					output << "\n";
+					cout << "\n";
+					nextcolumn = 0;
+					nextrow++;
+				}
+				
+			}
+			else {
+				if (x[i] == '1') {
+					deletestring++;
+					previoustemp = temp;
+					temp = temp->right;
+				}
+				else {
+					deletestring++;
+					previoustemp = temp;
+					temp = temp->left;
+				}
+			}
+
+		}
+		
+		x = x.substr(deletestring, x.size());
+		previousx = x;
+		
+		//x = " ";
+		//cout << buffer;
+
+	}
+	x = x.substr(0, x.size() - extrabits);
+	int deletestring = 0;
+	bool findleaf = 0;
+	int j = 0;
+	while (x.size()!=0) {
+		deletestring = 0;
+		findleaf = 0;
+		for (int i = 0; i<x.size() && findleaf == 0;i++) {
+			if (temp != NULL && temp->left == NULL && temp->right == NULL) {
+				cout << temp->data;
+				nextcolumn++;
+				output << temp->data;
+				temp = heap.root;
+				findleaf = 1;
+				if (nextcolumn == end_of_line[nextrow]) {
+					output << "\n";
+					cout << "\n";
+					nextcolumn = 0;
+					nextrow++;
+				}
+				
+			}
+			else {
+				if (x[i] == '1') {
+					deletestring++;
+					previoustemp = temp;
+					temp = temp->right;
+				}
+				else {
+					deletestring++;
+					previoustemp = temp;
+					temp = temp->left;
+				}
+			}
+
+		}
+		j++;
+		if (deletestring <= x.size()) {
+ 			x = x.substr(deletestring, x.size());
+			previousx = x;
+		}
+		else{
+			break;
+		}
+		
+		
+		
+	}
+	
+
+
+	cout << "\n";
+	return decodecount;
+}
+
+
+char* increasesize(char *arr,int &currentsize,int &charsize,char key) {
+	char* newarr = new char[charsize + 1];
+	int i = 0;
+	for (i = 0;i < charsize;i++) {
+		newarr[i] = arr[i];
+	}
+	newarr[i] = key;
+	currentsize++;
+	charsize++;
+	return newarr;
+}
+
+int *frequency_increasesize(int* frequencylist, int currentsize, int charsize) {
+	int* newarr = new int[charsize];
+	int i = 0;
+	for (i = 0;i < charsize-1;i++) {
+		newarr[i] = frequencylist[i];
+	}
+	newarr[i] = 1;
+    return newarr;
+}
+
+bool search_unique(int *&frequencylist,char *arr,int currentsize, char key) {
+	for (int i = 0;i < currentsize;i++) {
+		if (arr[i] == key) {
+			frequencylist[i]++;
+			return 1;
+		}
+	}
+	return 0;
+}
+void saveuniquecharacters(int*& frequencylist,char *&arr,int &currentsize, int& charsize, string str) {
+	for (int i = 0;str[i] != '\0';i++) {
+		if (!search_unique(frequencylist,arr, currentsize, str[i])) {
+			if (currentsize < charsize) {
+				arr[currentsize] = str[i];
+				currentsize++;
+			}
+			else {
+				arr = increasesize(arr,currentsize,charsize,str[i]);
+				frequencylist = frequency_increasesize(frequencylist, currentsize, charsize);
+			}
+		}
+	}
+}
+
+
+int main() {
+    string filelocation;
+    cout << "Enter File Location: ";
+    cin >> filelocation;
+	cout << endl;
+	ifstream fin;
+	fin.open(filelocation);
+	//fin.open("copytextfile.txt");
+	if (!fin) {
+		cout << "NOT FOUND: " << endl;
+
+	}
+	else {
+		cout << "FILE OPEN FOR READING" << endl;
+		int arrsize = 10;
+		int currentelements = 0;
+		char* arr = new char[arrsize];
+		string str;
+		int* frequencylist = new int[arrsize];
+		for (int i = 0;i < arrsize;i++) {
+			frequencylist[i] = 1;
+		}
+
+		int countsize = 0;
+		int i = 0;
+		int* end_of_line = new int[100];
+		while (!fin.eof()) {
+			getline(fin,str);
+			end_of_line[countsize] = str.size();
+			saveuniquecharacters(frequencylist,arr, currentelements, arrsize, str);
+			countsize++;
+			cout << str << endl;
+		}
+		fin.close();
+		// for (int i = 0;i < countsize;i++) {
+		// 	cout << end_of_line[i] << endl;
+		// }
+
+		
+		 //cout << "CurrentSize: " << countsize << endl;
+		 //cout << "CurrentElements: " << currentelements << endl;
+		 //cout << "ARR SIZE: " << arrsize << endl;
+		 //cout << "ARRAY OF UNIQUE CHARACTERS: " << endl;
+		 //for (int i = 0;i < currentelements;i++) {
+		 //	cout << arr[i] << "  ";
+		 //	cout << frequencylist[i] << endl;
+		 //}
+	     minHeap heap(arr, frequencylist, currentelements);
+	    // heap.display();
+	     cout << "Creting BT..." << endl;
+		 cout << endl;
+	     heap.creatingbinarytree();
+		 heap.display();
+		 int last_byte_of_file = 0;
+		 cout << "-------------------------------------------------" << endl;
+		 int countbytes = encodemessage(arr, frequencylist, currentelements,filelocation,last_byte_of_file);
+		 cout << "Number Of Bytes Written in BIN FILE : " << countbytes << endl;
+		 cout << "-------------------------------------------------" << endl;
+		 int decodecount= decodemessage(countbytes, arr, frequencylist, currentelements,end_of_line,countsize,last_byte_of_file);
+		
+	}
+	
+	
+	system("pause");
+
+
+}
