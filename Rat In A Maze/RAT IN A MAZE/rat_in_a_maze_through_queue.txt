@@ -1,0 +1,606 @@
+#include <iostream>
+#include "myconsole.h"
+#include "mygraphics.h"
+#include<Windows.h>
+using namespace std;
+template<class T>
+class linkedlist {
+public:
+	class node {
+	private:
+		T data;
+		node* next;
+		friend class linkedlist<T>;
+	public:
+		node(T Val) {
+			data = Val;
+			next = NULL;
+		}
+	};
+	class listiterator {
+	protected:
+		node* current;
+		friend class linkedlist<T>;
+	public:
+		listiterator() {
+			current = NULL;
+		}
+		listiterator(node* temp) {
+			current = temp; // called in begin()
+			// called in end()
+		}
+		T& operator*() {
+			return current->data;
+		}
+		bool operator==(listiterator rhs) {
+			return (current == rhs.current);
+		}
+		bool operator!=(listiterator rhs) {
+			return (current != rhs.current);
+		}
+		listiterator& operator++() {
+			if (current != NULL) {
+				current = current->next;
+			}
+
+			return *this;
+		}
+		listiterator operator++(int) {
+			listiterator temp = *this;
+			if (current != NULL) {
+				current = current->next;
+			}
+
+			return temp;
+		}
+
+	};
+	listiterator begin() {
+		return head;
+	}
+	listiterator end() {
+		return nullptr;
+	}
+	linkedlist() {
+		head = NULL;
+	}
+	void insert_at_head(T val) {
+		node* create = new node(val);
+		if (head == NULL) {
+			head = create;
+			create->next = NULL;
+
+		}
+		else {
+			create->next = head;
+			head = create;
+
+		}
+	}
+	void insert_at_tail(T val) {
+		node* create = new node(val);
+
+		if (head == NULL) {
+			insert_at_head(val);
+		}
+		else {
+			node* temp = head;
+			while (temp->next != NULL) {
+				temp = temp->next;
+			}
+			temp->next = create;
+		}
+
+
+
+	}
+	void display() {
+		node* temp = head;
+		while (temp != NULL) {
+			cout << temp->data << " ,";
+			temp = temp->next;
+		}
+	}
+	void delete_from_head() {
+		if (head == NULL) {
+			cout << "Already NULL...." << endl;
+		}
+		else {
+
+			if (head->next != NULL) {
+				node* temp = head;
+				head = head->next;
+				delete temp;
+			}
+			else {
+				head = NULL;
+			}
+
+		}
+	}
+	bool isempty() {
+		if (head == NULL) {
+			return 1;
+		}
+		else {
+			return 0;
+		}
+	}
+	void gethead(int& v) {
+		v = head->data;
+	}
+
+private:
+	node* head;
+
+};
+template<class T>
+class queue {
+	linkedlist<T> que;
+public:
+	queue() {
+
+	}
+	bool enqueue(T val) {
+		que.insert_at_tail(val);
+		return 1;
+	}
+	bool dequeue() {
+
+		if (que.isempty() == 1) {
+			return 0;
+		}
+		else {
+			que.delete_from_head();
+			return 1;
+		}
+	}
+	bool isempty() {
+		if (que.isempty()) {
+			return 1;
+		}
+		else {
+			return 0;
+		}
+	}
+	void gettop(int& i) {
+		que.gethead(i);
+	}
+	void print() {
+		cout << "front" << "         " << "rear" << endl;
+		cout << "|                |" << endl;
+		que.display();
+	}
+};
+class rat_in_a_maze {
+	int** arr;
+	int rows;
+	int columns;
+	int noofblockages;
+	int sourcei;
+	int sourcej;
+	int destinationi;
+	int destinationj;
+	queue<int>* que1; // for storing i
+	queue<int>* que2; // for storing j
+	queue<int>* que3; // for storing data
+public:
+	rat_in_a_maze(int rows, int columns, int blockages) {
+		noofblockages = blockages;
+		this->rows = rows;
+		this->columns = columns;
+
+		arr = new int* [rows];
+		for (int j = 0;j < rows;j++) {
+			arr[j] = new int[columns];
+		}
+		for (int i = 0;i < rows;i++) {
+			for (int j = 0;j < columns;j++) {
+				arr[i][j] = 0;
+			}
+		}
+		sourcei = 0;
+		sourcej = 0;
+		destinationi = rows - 1;
+		destinationj = columns - 1;
+		
+		que1 = new queue<int>;
+		que2 = new queue<int>;
+		que3 = new queue<int>;
+		int randomrow = 0;
+		int randomcolumn = 0;
+		srand(time(NULL));
+		for (int i = 0;i < noofblockages;i++) {
+
+			randomrow = rand() % rows;
+			randomcolumn = rand() % columns;
+			arr[randomrow][randomcolumn] = -1;
+		}
+		setdestination(1, 1);   // 9 0 true  0 9 true    0 0 true
+		arr[sourcei][sourcej] = 0;
+		if (sourcei < rows-1 && sourcej < columns) {
+			arr[sourcei + 1][sourcej] = 0;
+		}
+		if (sourcei < rows && sourcej < columns - 1) {
+			arr[sourcei][sourcej + 1] = 0;
+		}
+		if (sourcei >= 1 && sourcej < columns) {
+			arr[sourcei - 1][sourcej] = 0;
+
+		}
+		if (sourcei < rows && sourcej >= 1) {
+			arr[sourcei][sourcej - 1] = 0;
+		}
+		arr[destinationi][destinationj] = 99;
+		if (destinationi < rows - 1 && destinationj < columns) {
+			arr[destinationi + 1][destinationj] = 0;
+		}
+		if (destinationi < rows && destinationj < columns - 1) {
+			arr[destinationi][destinationj + 1] = 0;
+		}
+		if (destinationi >= 1 && destinationj < columns) {
+			arr[destinationi - 1][destinationj] = 0;
+
+		}
+		if (destinationi < rows && destinationj >= 1) {
+			arr[destinationi][destinationj - 1] = 0;
+		}
+	}
+	void setdestination(int a1, int a2) {
+		destinationi = a1;
+		destinationj = a2;
+
+	}
+	void setsource(int a1, int a2) {
+		sourcei = a1;
+		sourcej = a2;
+	}
+	void display() {
+		for (int i = 0;i < rows;i++) {
+			for (int j = 0;j < columns;j++) {
+				cout << arr[i][j] << "        ";
+			}
+			cout << endl;
+		}
+	}
+	bool winingcondition(int i, int j) {
+		if (arr[i][j] == 99) {
+			return 1;
+		}
+		else {
+			return 0;
+		}
+	}
+	void print() {
+		int x1 = 200;
+		int x2 = x1 + 20;
+		int y1 = 10;
+		int y2 = y1 + 20;
+		for (int i = 0;i < rows;i++) {
+			for (int j = 0;j < columns;j++) {
+				if (arr[i][j] == 0) {
+					myRect(x1, y1, x2, y2, RGB(0, 165, 0), RGB(0, 165, 0));
+					x1 = x2 + 20;
+					x2 = x1 + 20;
+
+					//Sleep(1000);
+				}
+				else if (arr[i][j] == -1) {
+					myRect(x1, y1, x2, y2, RGB(255, 0, 0), RGB(255, 0, 0));
+					x1 = x2 + 20;
+					x2 = x1 + 20;
+
+
+					//Sleep(1000);
+				}
+				else if (arr[i][j] == -2) {
+					myRect(x1, y1, x2, y2, RGB(50, 0, 255), RGB(50, 0, 255));
+					x1 = x2 + 20;
+					x2 = x1 + 20;
+
+
+					//Sleep(1000);
+				}
+				else if (arr[i][j] == 99) {
+					myRect(x1, y1, x2, y2, RGB(0, 0, 0), RGB(212, 175, 55)); // 255 0 255
+					
+					x1 = x2 + 20;
+					x2 = x1 + 20;
+
+
+					//Sleep(1000);
+
+				}
+				else if (arr[i][j] == 1){
+					myRect(x1, y1, x2, y2, RGB(212, 175, 155), RGB(212, 175, 155));
+					x1 = x2 + 20;
+					x2 = x1 + 20;
+				}
+				else {
+					myRect(x1, y1, x2, y2, RGB(0, 0, 0), RGB(0, 0, 0));
+					x1 = x2 + 20;
+					x2 = x1 + 20;
+				}
+			}
+			y1 = y2 + 20;
+			y2 = y1 + 20;
+			x1 = 200;
+			x2 = x1 + 20;
+		}
+	}
+
+	void startgame() {
+		int value = 1;
+		int move = 0;
+		int win = 0;
+		int i = sourcei;
+		int j = sourcej;
+		arr[i][j] = 1;
+		
+		int displayingspeed = 100;
+		que1->enqueue(i);
+		que2->enqueue(j);
+		que3->enqueue(value);
+		system("cls");
+		win = winingcondition(i, j);
+		++value;
+		while (!que1->isempty() && !que2->isempty() && !win) {
+			if (winingcondition(i, j) == 99) {
+				win = 1;
+			}
+			else {
+				win = 0;
+				if (i < rows && j < columns) {
+					move = 0;
+
+					if (i < rows && j < columns - 1) {
+						if (arr[i][j + 1] == 0 || arr[i][j + 1] == 99 && !win) {
+							que1->enqueue(i);
+							que2->enqueue(j + 1);
+							que3->enqueue(value);
+							win = winingcondition(i, j + 1);
+							move++;
+							arr[i][j + 1] = value;
+
+						//	system("cls");
+							//display();
+							print();
+							Sleep(displayingspeed);
+							//j++;
+						}
+					}
+					if (i < rows - 1 && j < columns && !win) {
+						if (arr[i + 1][j] == 0 || arr[i + 1][j] == 99 && !win) {
+							que1->enqueue(i + 1);
+							que2->enqueue(j);
+							que3->enqueue(value);
+							win = winingcondition(i + 1, j);
+							move++;
+							arr[i + 1][j] = value;
+						//	system("cls");
+							//display();
+							print();
+							Sleep(displayingspeed);
+							//i++;
+						}
+					}
+					if (i >= 1 && j < columns && !win) {
+						if (arr[i - 1][j] == 0 || arr[i - 1][j] == 99 && !win) {
+							que1->enqueue(i - 1);
+							que2->enqueue(j);
+							que3->enqueue(value);
+							win = winingcondition(i - 1, j);
+							move++;
+							arr[i - 1][j] = value;
+						//	system("cls");
+							//display();
+							print();
+							Sleep(displayingspeed);
+							//i--;
+						}
+					}
+					if (i < rows && j >= 1 && !win) {
+						if (arr[i][j - 1] == 0 || arr[i][j - 1] == 99 && !win) {
+							que1->enqueue(i);
+							que2->enqueue(j - 1);
+							que3->enqueue(value);
+							win = winingcondition(i, j - 1);
+							move++;
+							arr[i][j - 1] = value;
+						//	system("cls");
+							//display();
+							print();
+							Sleep(displayingspeed);
+							//j--;
+						}
+					}
+					
+					if (!win) {
+						que1->gettop(i);
+						que2->gettop(j);
+						que3->gettop(value);
+						
+						
+							win = winingcondition(i, j);
+							que1->dequeue();
+							que2->dequeue();
+							que3->dequeue();
+						
+					
+
+					}
+					value++;
+
+				}
+			}
+		}
+		//system("cls");
+		print();
+		Sleep(displayingspeed);
+		cout << i << "I th index" << endl;
+		cout << j << "Jth index" << endl;
+		char draw[] = "BACK TRACK";
+		
+		myDrawTextWithFont(300, 300, 200, draw, RGB(125, 222, 209), RGB(9, 200, 250));
+		Sleep(1000);
+		system("cls");
+		//cout << "BACK TRACKING" << endl;
+		//system("pause");
+		bool reached = 0;
+		while (!reached) {
+			if (i < rows && j >= 1 && arr[i][j-1]==value-1) {
+				bool stop = 0;
+				while (!stop) {
+					if (i < rows && j >= 1 && arr[i][j - 1] == value - 1) {
+						j--;
+						arr[i][j] = -2;
+					//	system("cls");
+						//display();
+						print();
+						Sleep(displayingspeed);
+						value--;
+						if (i == sourcei && j == sourcej) {
+							reached = 1;
+							stop = 1;
+							break;
+						}
+						else {
+							stop = 0;
+						}
+					}
+					else {
+						stop = 1;
+					}
+					
+				}
+			}
+			if (i >=1  && j <columns && arr[i-1][j] == value - 1) {
+				bool stop = 0;
+				while (!stop) {
+					if (i >=1  && j <columns && arr[i-1][j] == value - 1) {
+						i--;
+						arr[i][j] = -2;
+					//	system("cls");
+						//display();
+						print();
+						Sleep(displayingspeed);
+						value--;
+						if (i == sourcei && j == sourcej) {
+							reached = 1;
+							stop = 1;
+							break;
+						}
+						else {
+							stop = 0;
+						}
+					}
+					else {
+						stop = 1;
+					}
+
+				}
+			}
+			if (i <rows && j < columns-1 && arr[i][j+1] == value - 1) {
+				bool stop = 0;
+				while (!stop) {
+					if (i <rows && j < columns-1 && arr[i][j+1] == value - 1) {
+						j++;
+						arr[i][j] = -2;
+					//	system("cls");
+						//display();
+						print();
+						Sleep(displayingspeed);
+						value--;
+						if (i == sourcei && j == sourcej) {
+							reached = 1;
+							stop = 1;
+							break;
+						}
+						else {
+							stop = 0;
+						}
+					}
+					else {
+						stop = 1;
+					}
+
+				}
+			}
+			if (i < rows-1 && j < columns  && arr[i+1][j ] == value - 1) {
+				bool stop = 0;
+				while (!stop) {
+					if (i < rows-1 && j < columns  && arr[i+1][j ] == value - 1) {
+						i++;
+						arr[i][j] = -2;
+					//	system("cls");
+						//display();
+						print();
+						Sleep(displayingspeed);
+						value--;
+						if (i == sourcei && j == sourcej) {
+							reached = 1;
+							stop = 1;
+							break;
+						}
+						else {
+							stop = 0;
+						}
+					}
+					else {
+						stop = 1;
+					}
+
+				}
+			}
+			if (j == columns - 1 && i >=1 && arr[i-1][j] == value - 1) {
+				bool stop = 0;
+				while (!stop) {
+					if (i >=1  && j == columns-1 && arr[i-1 ][j] == value - 1) {
+						i--;
+						arr[i][j] = -2;
+					//	system("cls");
+						//display();
+						print();
+						Sleep(displayingspeed);
+						value--;
+						if (i == sourcei && j == sourcej) {
+							reached = 1;
+							stop = 1;
+							break;
+						}
+						else {
+							stop = 0;
+						}
+					}
+					else {
+						stop = 1;
+					}
+
+				}
+			}
+
+
+		}
+			
+		
+		
+		
+
+	}
+};
+int main() {
+	rat_in_a_maze obj(10, 10, 20);
+	obj.setsource(4, 5);
+	
+	system("cls");
+	obj.startgame();
+	obj.print();
+	char draw[] = "REACHED FINALLY";
+	myDrawTextWithFont(150, 300, 200, draw, RGB(125, 222, 209), RGB(9, 200, 250));
+	Sleep(2000);
+	//obj.display();
+	system("pause");
+}
+
+
+

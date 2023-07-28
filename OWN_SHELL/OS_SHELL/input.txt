@@ -1,0 +1,10 @@
+a.out
+input.txt
+ownshell.c
+a.out
+a.out
+input.txt
+input.txt
+input.txt
+ownshell.c
+ownshell.c
