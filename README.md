@@ -115,7 +115,20 @@
   </table>
 </div>
 
-<div align="center">
-  <img align="left" src="https://github-readme-stats.vercel.app/api/top-langs?username=tahasheikh111&show_icons=true&locale=en&layout=compact" alt="tahasheikh111" style="border-radius: 10px;">
-  <img align="center" src="https://github-readme-stats.vercel.app/api?username=tahasheikh111&show_icons=true&locale=en" alt="tahasheikh111" style="border-radius: 10px;">
+<div align="center" style="background-color: #1f1f1f; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+  <img src="https://github-readme-streak-stats.herokuapp.com/?user=tahasheikh111&theme=radical" alt="GitHub Streak" style="border-radius: 10px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+  
+<div align="center" style="background-color: #1f1f1f; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+  <h3 style="color: #1f8bff;">GitHub Contribution Graph</h3>
+  <a href="https://github.com/ashutosh00710/github-readme-activity-graph" target="_blank">
+    <img src="https://github-readme-activity-graph.vercel.app/graph?username=tahasheikh111&theme=react-dark" alt="Taha's GitHub Activity Graph" style="border-radius: 10px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+  </a>
 </div>
+
+
+
+
+
+
+
+
