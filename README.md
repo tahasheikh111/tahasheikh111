@@ -5,12 +5,41 @@
   <h3 style="font-size: 20px; margin: 10px;">In love with Computer Science's endless wonders</h3>
   <img src="https://www.icegif.com/wp-content/uploads/2022/01/icegif-174.gif" alt="Coding" width="400" style="border-radius: 10px;">
   <br>
-  <p style="margin: 10px;">
-    <a href="https://github.com/tahasheikh111">
-      <img src="https://img.shields.io/github/followers/tahasheikh111?label=Follow&style=social" alt="GitHub followers" />
-    </a>
-    <img src="https://img.shields.io/badge/Languages-C%2B%2B%20%7C%20HTML%20%7C%20CSS%20%7C%20ASP.NET%20%7C%20Postman-blue" alt="Languages" />
-  </p>
+  <h3 align="center">Languages and Tools:</h3>
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">
+        <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-original.svg" alt="C++" width="60" height="60" /><br />
+        C++
+      </td>
+      <td align="center">
+        <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/csharp/csharp-original.svg" alt="C#" width="60" height="60" /><br />
+        C#
+      </td>
+      <td align="center">
+        <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original.svg" alt="HTML" width="60" height="60" /><br />
+        HTML
+      </td>
+    </tr>
+    <tr>
+      <td align="center">
+        <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original.svg" alt="CSS" width="60" height="60" /><br />
+        CSS
+      </td>
+      <td align="center">
+        <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="JavaScript" width="60" height="60" /><br />
+        JavaScript
+      </td>
+      <td align="center">
+        <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="Python" width="60" height="60" /><br />
+        Python
+      </td>
+    </tr>
+  </table>
+</div>
+
 
   <p style="font-size: 18px; margin: 10px;">
     🌱 Currently learning <strong>Machine learning, Automation through web scraping</strong>
