@@ -5,7 +5,7 @@
   <h3 style="font-size: 20px; margin: 10px;">In love with Computer Science's endless wonders</h3>
   <img src="https://www.icegif.com/wp-content/uploads/2022/01/icegif-174.gif" alt="Coding" width="400" style="border-radius: 10px;">
   <br>
-  <h3 align="center">Languages and Tools:</h3>
+  <h3 align="center">Languages:</h3>
 
 <div align="center">
   <table>
@@ -68,12 +68,51 @@
     </a>
   </p>
 </div>
+<h3 align="center">Tools:</h3>
 
 <div align="center">
-  <h3>Languages and Tools:</h3>
-  <p>
-    <!-- Add your icons here for the languages and tools you want to display -->
-  </p>
+  <table>
+    <tr>
+      <td align="center">
+        <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/vscode/vscode-original.svg" alt="Visual Studio Code" width="60" height="60" /><br />
+        VS Code
+      </td>
+      <td align="center">
+        <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/visualstudio/visualstudio-plain.svg" alt="Visual Studio" width="60" height="60" /><br />
+        Visual Studio
+      </td>
+      <td align="center">
+        <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/github/github-original.svg" alt="GitHub" width="60" height="60" /><br />
+        GitHub
+      </td>
+      <td align="center">
+        <img src="https://www.vectorlogo.zone/logos/getpostman/getpostman-icon.svg" alt="Postman" width="60" height="60" /><br />
+        Postman
+      </td>
+    </tr>
+    <tr>
+      <td align="center">
+        <a href="https://clickup.com/" target="_blank">
+          <img src="https://mindflow.io/wp-content/uploads/2022/09/clickup-logo.jpeg" alt="ClickUp" width="60" height="60" /><br />
+        </a>
+        ClickUp
+      </td>
+      <td align="center">
+        <a href="https://www.slake.io/" target="_blank">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKb3PWWVlXXci3eoWfm4pJTdfjeBzf7lzW7Q&usqp=CAU" alt="Slake" width="60" height="60" /><br />
+        </a>
+        Slake
+      </td>
+      <td align="center">
+        <img src="https://www.vectorlogo.zone/logos/figma/figma-icon.svg" alt="Figma" width="60" height="60" /><br />
+        Figma
+      </td>
+      <td align="center">
+        <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/pycharm/pycharm-original.svg" alt="PyCharm" width="60" height="60" /><br />
+        PyCharm
+      </td>
+    </tr>
+  </table>
 </div>
 
 <div align="center">
