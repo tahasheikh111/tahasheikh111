@@ -57,7 +57,7 @@
 <div align="center">
   <h3>Connect with me:</h3>
   <p>
-    <a href="https://linkedin.com/in/in/taha-sheikh-602a0a239" target="blank">
+    <a href="https://linkedin.com/in/taha-sheikh-602a0a239/" target="blank">
       <img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="in/taha-sheikh-602a0a239" height="30" width="40" />
     </a>
     <a href="https://fb.com/tahasheikh111.ts" target="blank">
