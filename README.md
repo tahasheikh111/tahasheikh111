@@ -3,7 +3,7 @@
   <img src="https://wallpaperaccess.com/full/7167569.png" alt="Code Photo" width="800" style="border-radius: 10px;">
   <h1 style="font-size: 36px; margin: 10px;">Passionate about AI | Taha Sheikh</h1>
   <h3 style="font-size: 20px; margin: 10px;">Exploring the Possibilities of Machine Learning</h3>
-  <img src="https://www.vecteezy.com/video/20938579-circuit-board-with-moving-electrons-data-flow-loop-background-animation-artificial-intelligence-visualization-of-in-machine-learning-computer-technology-science-cyber-and-futuristic-concept" alt="Coding" width="400" style="border-radius: 10px;">
+  <img src="https://img.freepik.com/free-photo/html-system-website-concept_23-2150376770.jpg?size=626&ext=jpg&ga=GA1.1.1448711260.1706832000&semt=ais" alt="Coding" width="400" style="border-radius: 10px;">
   <br>
   <h3 align="center">Languages:</h3>
 
