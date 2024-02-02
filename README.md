@@ -1,9 +1,9 @@
 <div align="center">
   <!-- Code Photo -->
   <img src="https://wallpaperaccess.com/full/7167569.png" alt="Code Photo" width="800" style="border-radius: 10px;">
-  <h1 style="font-size: 36px; margin: 10px;">CS Enthusiast | Taha Sheikh</h1>
-  <h3 style="font-size: 20px; margin: 10px;">In love with Computer Science's endless wonders</h3>
-  <img src="https://www.icegif.com/wp-content/uploads/2022/01/icegif-174.gif" alt="Coding" width="400" style="border-radius: 10px;">
+  <h1 style="font-size: 36px; margin: 10px;">Passionate about AI | Taha Sheikh</h1>
+  <h3 style="font-size: 20px; margin: 10px;">Exploring the Possibilities of Machine Learning</h3>
+  <img src="https://www.vecteezy.com/video/20938579-circuit-board-with-moving-electrons-data-flow-loop-background-animation-artificial-intelligence-visualization-of-in-machine-learning-computer-technology-science-cyber-and-futuristic-concept" alt="Coding" width="400" style="border-radius: 10px;">
   <br>
   <h3 align="center">Languages:</h3>
 
@@ -46,7 +46,7 @@
     <br>
     👯 Looking to collaborate on <strong>Machine learning projects</strong>
     <br>
-    💬 Ask me about <strong>C++, HTML, CSS, ASP.NET, Postman</strong>
+    💬 Ask me about <strong>C++, HTML, CSS, Python, ASP.NET, Postman</strong>
     <br>
     📫 How to reach me: <strong>tahasheikh111.ts@gmail.com</strong>
     <br>
